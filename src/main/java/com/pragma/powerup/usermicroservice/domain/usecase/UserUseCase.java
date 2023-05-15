@@ -33,6 +33,7 @@ public class UserUseCase implements IUserServicePort {
         }
 
         /*NullPointerException
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate currently = LocalDate.now();
         LocalDate birthDate;
