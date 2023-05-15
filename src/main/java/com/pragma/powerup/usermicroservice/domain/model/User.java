@@ -8,12 +8,12 @@ public class User {
     private String surname;
     private String dniNumber;
     private String phone;
-    private LocalDate birthDate;
+    private String birthDate;
     private String mail;
     private String password;
     private Role role;
 
-    public User(Long id, String name, String surname, String dniNumber, String phone, LocalDate birthDate, String mail, String password, Role role) {
+    public User(Long id, String name, String surname, String dniNumber, String phone, String birthDate, String mail, String password, Role role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -65,11 +65,11 @@ public class User {
         this.phone = phone;
     }
 
-    public LocalDate getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 
