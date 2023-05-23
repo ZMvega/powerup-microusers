@@ -1,14 +1,21 @@
 package com.pragma.powerup.usermicroservice.domain.usecase;
 
+import com.pragma.powerup.usermicroservice.configuration.Constants;
 import com.pragma.powerup.usermicroservice.domain.api.IUserServicePort;
 import com.pragma.powerup.usermicroservice.domain.model.User;
+import com.pragma.powerup.usermicroservice.domain.spi.IRolePersistencePort;
 import com.pragma.powerup.usermicroservice.domain.spi.IUserPersistencePort;
+
+import java.time.LocalDate;
+import java.time.Period;
 
 public class UserUseCase implements IUserServicePort {
     private final IUserPersistencePort userPersistencePort;
+    private final IRolePersistencePort rolePersistencePort;
 
-    public UserUseCase(IUserPersistencePort personPersistencePort) {
-        this.userPersistencePort = personPersistencePort;
+    public UserUseCase(IUserPersistencePort userPersistencePort, IRolePersistencePort rolePersistencePort) {
+        this.userPersistencePort = userPersistencePort;
+        this.rolePersistencePort = rolePersistencePort;
     }
 
     @Override
@@ -18,45 +25,26 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public void saveOwner(User user) {
-        String phoneRegex = "^\\+?[0-9]{12}$";
-        String dniRegex = "^[0-9]+$";
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-
-        if(!user.getPhone().matches(phoneRegex)){
-            throw new IllegalArgumentException("Phone must have 13 digits including '+'");
-        }
-        if(!user.getDniNumber().matches(dniRegex)){
-            throw new IllegalArgumentException("DNI must be only number");
-        }
-        if(!user.getMail().matches(emailRegex)){
-            throw new IllegalArgumentException("Mail must have the right srructure");
-        }
-
-        /*NullPointerException
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate currently = LocalDate.now();
         LocalDate birthDate;
         Period age;
         try{
-             birthDate = LocalDate.parse(user.getBirthDate(), formatter);
+             birthDate = LocalDate.parse(user.getBirthDate());
         }catch (NullPointerException n){
             throw  new RuntimeException("Birdate null");
         }
+
         if(birthDate != null){
             age = Period.between(birthDate, currently);
         }else{
             throw new IllegalArgumentException();
         }
-        if (age.getYears() < 18){
-            throw new IllegalArgumentException("Owner must have 18 years");
-        }
-        */
 
-        if((user.getPhone().matches(phoneRegex)) &&
-                (user.getDniNumber().matches(dniRegex)) &&
-                (user.getMail().matches(emailRegex))
-        ){
+        if (age.getYears() >= 18){
+            user.setRole(rolePersistencePort.getRole(Constants.OWNER_ROLE_ID));
             userPersistencePort.saveOwner(user);
+        }else {
+            throw new IllegalArgumentException("Owner must have 18 years old");
         }
     }
 }

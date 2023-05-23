@@ -15,6 +15,7 @@ public class UserMysqlAdapter implements IUserPersistencePort {
     private final IUserRepository userRepository;
     private final IUserEntityMapper personEntityMapper;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public void saveUser(User user) {
         if (userRepository.findByDniNumber(user.getDniNumber()).isPresent()) {

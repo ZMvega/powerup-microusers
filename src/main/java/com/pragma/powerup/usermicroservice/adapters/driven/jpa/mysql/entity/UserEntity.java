@@ -30,10 +30,10 @@ public class UserEntity {
     @Column(unique = true, nullable = false, length = 20)
     private String dniNumber;
     private String phone;
-    private String birthDate;
+    private LocalDate birthDate;
     private String mail;
     private String password;
-    //private String tokenPassword;
+
     @ManyToOne(optional = true)
     @JoinColumn(name = "id_role")
     private RoleEntity role;

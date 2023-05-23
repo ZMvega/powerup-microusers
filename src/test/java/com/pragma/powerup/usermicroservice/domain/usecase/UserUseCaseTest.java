@@ -2,6 +2,7 @@ package com.pragma.powerup.usermicroservice.domain.usecase;
 
 import com.pragma.powerup.usermicroservice.domain.model.Role;
 import com.pragma.powerup.usermicroservice.domain.model.User;
+import com.pragma.powerup.usermicroservice.domain.spi.IRolePersistencePort;
 import com.pragma.powerup.usermicroservice.domain.spi.IUserPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +17,15 @@ class UserUseCaseTest {
 
     @Mock
     private IUserPersistencePort userPersistencePort;
+
+    @Mock
+    private IRolePersistencePort rolePersistencePort;
     private UserUseCase userUseCase;
 
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.openMocks(this);
-        userUseCase = new UserUseCase(userPersistencePort);
+        userUseCase = new UserUseCase(userPersistencePort, rolePersistencePort);
     }
 
     @Test
